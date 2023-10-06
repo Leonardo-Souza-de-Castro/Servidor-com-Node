@@ -1,0 +1,89 @@
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100vh;
+}
+
+/* Menu */
+
+.menu{
+    height: 7%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: rgb(56, 63, 70);
+}
+
+.logo{
+    width: 10%;
+}
+
+.container_menu{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 15%;
+}
+
+.link_menu{
+    font-family: "Segoe UI";
+    font-size: 20px;
+    text-decoration: none;
+    color: white;
+}
+
+.divisao{
+    background-color: white;
+    height: 22px;
+    width: 1px;
+}
+
+.rodape{
+    width: 100%;
+    height: 8%;
+    background-color: rgb(56, 63, 70);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.titulo{
+    font-family: "Segoe UI";
+    font-size: 28px;
+}
+
+table, th, td{
+    border: 1px solid black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+}
+
+.tabela{
+    width: 50%;
+    height: 15%;
+}
+
+td{
+    text-align: center;
+}
+
+.links{
+    text-decoration: none;
+    color: black;
+}
+
+.links:hover{
+    font-size: 17px;
+    font-weight: bold;
+}
