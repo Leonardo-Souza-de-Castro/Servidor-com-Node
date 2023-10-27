@@ -46,13 +46,14 @@ const client = new MongoClient(uri, {useNewUrlParser: true}) //Faz a conexão co
 
 // Método post criado, com a url do método e a função que o método deve realizar
 app.post('/home', function(request, response){ //Inicio da função post
-    client.db("exemplo_bd").collection("usuarios").insertOne(
-        {db_email: request.body.email, db_senha: request.body.senha, function (err) { 
+    client.db("exemplo_bd").collection("usuarios").insertOne( //Aqui eu indico o nome do banco e qual a collection ele vai utilizar
+        {db_email: request.body.email, db_senha: request.body.senha, function (err) //Aqui ele inidica quais o campos da collection usuarios existirão e quais serão atribuidos
+        { 
             if (err){
-                response.render('response', {resposta: "Erro ao cadastrar usuario"})
+                response.render('response', {resposta: "Erro ao cadastrar usuario"}) //Resposta que vai ser renderizada caso de erro
             }
             else{
-                response.render('resposta', {resposta: "Usuario cadastrado com sucesso!"})
+                response.render('resposta', {resposta: "Usuario cadastrado com sucesso!"}) //Resposta que vai ser renderizada caso de certo
             }
         }}
     )
@@ -63,13 +64,14 @@ app.post("/logar_usuario", function(request, response) {
     client.connect((err) => {
       // busca um usuário no banco de dados
       client.db("exemplo_bd").collection("usuarios").find(
-        {db_email: request.body.email, db_senha: request.body.senha }).toArray(function(err, items) {
+        {db_email: request.body.email, db_senha: request.body.senha }).toArray(function(err, items) //Indica quais informações serão recebidas da tela
+      {
           console.log(items);
-          if (items.length == 0) {
+          if (items.length == 0) { //Caso o usuario venha vazio ele valida e indica que o usuario não foi encontrado
             response.render('response', {resposta: "Usuário/senha não encontrado!"})
-          }else if (err) {
+          }else if (err) { //Resposta caso de erro
             response.render('response', {resposta: "Erro ao logar usuário!"})
-          }else {
+          }else { //Resposta se deu tudo certo
             response.render('response', {resposta: "Usuário logado com sucesso!"})       
           };
         });
