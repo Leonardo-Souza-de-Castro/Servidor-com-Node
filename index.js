@@ -3,7 +3,6 @@ var http = require('http');
 
 // Inicializando o pacote do express
 var express = require('express');
-const { listen } = require('express/lib/application');
 
 // Criando a variavel app, para podermos acessar o metodos do pacote express
 var app = express();
@@ -38,12 +37,42 @@ app.set('view engine', 'ejs')
 app.set('views', './views');
 //Após definir tudo isso devemos instalar o EJS com npm
 
-// Método post criado, com a url do método e a função que o método deve realizar
-app.post('/home', function(request, response){
-    var email =  request.body.email; // Pegando os valores pelo corpo do html
-    var senha =  request.body.senha;
-    console.log(email)
-    console.log(senha)
 
-    response.render('response', {email, senha})
+const MongoClient = require("mongodb").MongoClient; //Inicializando a bibilioteca do MongoDb
+
+const uri = "mongodb+srv://leonardo:guilherme85@leonardo.dvsd60e.mongodb.net/?retryWrites=true&w=majority"; //Definindo a URI de acesso do banco
+
+const client = new MongoClient(uri, {useNewUrlParser: true}) //Faz a conexão com o banco de dados
+
+// Método post criado, com a url do método e a função que o método deve realizar
+app.post('/home', function(request, response){ //Inicio da função post
+    client.db("exemplo_bd").collection("usuarios").insertOne(
+        {db_email: request.body.email, db_senha: request.body.senha, function (err) { 
+            if (err){
+                response.render('response', {resposta: "Erro ao cadastrar usuario"})
+            }
+            else{
+                response.render('resposta', {resposta: "Usuario cadastrado com sucesso!"})
+            }
+        }}
+    )
 })
+
+app.post("/logar_usuario", function(request, response) {
+    // realiza conexão com banco de dados
+    client.connect((err) => {
+      // busca um usuário no banco de dados
+      client.db("exemplo_bd").collection("usuarios").find(
+        {db_email: request.body.email, db_senha: request.body.senha }).toArray(function(err, items) {
+          console.log(items);
+          if (items.length == 0) {
+            response.render('response', {resposta: "Usuário/senha não encontrado!"})
+          }else if (err) {
+            response.render('response', {resposta: "Erro ao logar usuário!"})
+          }else {
+            response.render('response', {resposta: "Usuário logado com sucesso!"})       
+          };
+        });
+    }); 
+   });
+   
