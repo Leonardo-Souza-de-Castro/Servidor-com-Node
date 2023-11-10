@@ -15,7 +15,7 @@
     
         </form>
         <h2>Exemplo método cadastro</h2>
-        <form action="/home" method="post">
+        <form action="/cadastro" method="post">
             <input type="email" placeholder="Insira seu email:" name="email">
             <input type="password" placeholder="Insira seu senha:" name="senha">
             <button type="submit">Enviar</button>
@@ -24,6 +24,23 @@
 
         <h2>Exemplo método login</h2>
         <form action="/logar_usuario" method="post">
+            <input type="email" placeholder="Insira seu email:" name="email">
+            <input type="password" placeholder="Insira seu senha:" name="senha">
+            <button type="submit">Enviar</button>
+    
+        </form>
+
+        <h2>Exemplo método update</h2>
+        <form action="/atualizar_usuario" method="post">
+            <input type="email" placeholder="Insira seu email:" name="email">
+            <input type="password" placeholder="Insira seu senha:" name="senha">
+            <input type="password" placeholder="Insira seu senha:" name="novasenha">
+            <button type="submit">Enviar</button>
+    
+        </form>
+
+        <h2>Exemplo método deletar</h2>
+        <form action="/remover_usuario" method="post">
             <input type="email" placeholder="Insira seu email:" name="email">
             <input type="password" placeholder="Insira seu senha:" name="senha">
             <button type="submit">Enviar</button>

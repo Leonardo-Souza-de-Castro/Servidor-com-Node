@@ -45,36 +45,72 @@ const uri = "mongodb+srv://leonardo:guilherme85@leonardo.dvsd60e.mongodb.net/?re
 const client = new MongoClient(uri, {useNewUrlParser: true}) //Faz a conexão com o banco de dados
 
 // Método post criado, com a url do método e a função que o método deve realizar
-app.post('/home', function(request, response){ //Inicio da função post
-    client.db("exemplo_bd").collection("usuarios").insertOne( //Aqui eu indico o nome do banco e qual a collection ele vai utilizar
-        {db_email: request.body.email, db_senha: request.body.senha, function (err) //Aqui ele inidica quais o campos da collection usuarios existirão e quais serão atribuidos
+app.post('/cadastro', function(request, response){ //Inicio da função post
+    client.db("exemplo_bd").collection("usuarios").insertOne( //Aqui eu indico o nome do banco e qual a collection ele vai utilizar e qual função ele vai utilizar no caso insertOne (cadastro)
+        {db_email: request.body.email, db_senha: request.body.senha}, function (err) //Aqui ele inidica quais o campos da collection usuarios existirão e quais serão atribuidos
         { 
             if (err){
-                response.render('response', {resposta: "Erro ao cadastrar usuario"}) //Resposta que vai ser renderizada caso de erro
+                // response.render('response', {resposta: "Erro ao cadastrar usuario"}) //Resposta que vai ser renderizada caso de erro
+                response.render('response', {resposta: "Erro ao cadastrar usuario"})
             }
             else{
-                response.render('resposta', {resposta: "Usuario cadastrado com sucesso!"}) //Resposta que vai ser renderizada caso de certo
-            }
-        }}
-    )
-})
+                //response.render('response', {resposta: "Usuario cadastrado com sucesso!"}) //Resposta que vai ser renderizada caso de certo
+                response.render('response', {resposta: "Usuario cadastrado com sucesso!"})
+            };
+        });
+      });
 
 app.post("/logar_usuario", function(request, response) {
     // realiza conexão com banco de dados
-    client.connect((err) => {
+  client.connect((err) => {
       // busca um usuário no banco de dados
-      client.db("exemplo_bd").collection("usuarios").find(
-        {db_email: request.body.email, db_senha: request.body.senha }).toArray(function(err, items) //Indica quais informações serão recebidas da tela
-      {
-          console.log(items);
-          if (items.length == 0) { //Caso o usuario venha vazio ele valida e indica que o usuario não foi encontrado
-            response.render('response', {resposta: "Usuário/senha não encontrado!"})
-          }else if (err) { //Resposta caso de erro
-            response.render('response', {resposta: "Erro ao logar usuário!"})
-          }else { //Resposta se deu tudo certo
-            response.render('response', {resposta: "Usuário logado com sucesso!"})       
-          };
-        });
-    }); 
-   });
+    client.db("exemplo_bd").collection("usuarios").find( //.find significa que eu estou buscando algo
+      {db_email: request.body.email, db_senha: request.body.senha }).toArray(function(err, items) //Indica quais informações serão recebidas da tela
+    {
+        console.log(items);
+        if (items.length == 0) { //Caso o usuario venha vazio ele valida e indica que o usuario não foi encontrado
+          response.render('response', {resposta: "Usuário/senha não encontrado!"})
+        }else if (err) { //Resposta caso de erro
+          response.render('response', {resposta: "Erro ao logar usuário!"}) //utilizamos render para mandar para ejs e redirect para mandar para html
+        }else { //Resposta se deu tudo certo
+          response.render('response', {resposta: "Usuário logado com sucesso!"})  
+        };
+      });
+  }); 
+});
+
+app.post("/atualizar_usuario", function(req, resp) { 
+  // função criada para atualizar informações
+  client.db("exemplo_bd").collection("usuarios").updateOne( // A função de updateOne serve para atualizar informações de uma determina informação em uma collection
+      {db_email: request.body.email, db_senha: request.body.senha}, // Identifica qual objeto vai ser alterado comparando email e senha
+      { $set: {db_senha: req.body.novasenha} }, function (err, result) { // faz um set do campo senha pela nova senha
+        console.log(result);
+        if (result.modifiedCount == 0) { //Valida quantos campos foram atualizados
+          resp.render('response', {resposta: "Usuário/senha não encontrado!"})
+        }else if (err) {
+          resp.render('response', {resposta: "Erro ao atualizar usuário!"})
+        }else {
+          resp.render('response', {resposta: "Usuário atualizado com sucesso!"})       
+        };
+  });
+ 
+});
+app.post("/remover_usuario", function(req, resp) {
+
+  // remove do usuário
+  client.db("exemplo_bd").collection("usuarios").deleteOne(
+    {db_email: request.body.email, db_senha: request.body.senha} , function (err, result) {
+      console.log(result);
+      if (result.deletedCount == 0) {
+        resp.render('response', {resposta: "Usuário/senha não encontrado!"})
+      }else if (err) {
+        resp.render('response', {resposta: "Erro ao remover usuário!"})
+      }else {
+        resp.render('response', {resposta: "Usuário removido com sucesso!"})       
+      };
+    });
+
+});
+
+ 
    
